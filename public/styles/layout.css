@@ -31,4 +31,33 @@ body {
  main {
   width: 90%;
   background-color: #f4f1ec;
+  font-weight: 600;
+ }
+
+ .buttoncounter {
+  display: flex;
+  justify-content: space-between;
+ }
+
+ button {
+  background-color: #4056A1;
+  border: #4056A1;
+  color: #FFFFFF;
+  font-family: 'bungee';
+  padding: 5px;
+ }
+
+ textarea {
+  background-color: #f4f1ec;
+  border: #f4f1ec;
+  border-bottom: solid 5px #545149;
+  width: 100%;
+  padding: 0;
+  font-weight: 600;
+  font-size: large;
+ }
+
+ .counter {
+  font-family: 'bungee';
+  color: #545149;
  }
