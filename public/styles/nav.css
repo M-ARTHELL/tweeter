@@ -10,15 +10,18 @@ nav {
   position: fixed;
  }
 
+
  #logo {
   font-family: 'bungee';
   font-size: 40px;
  }
 
+
 .newtweet {
   font-family: 'Source Sans 3';
+  align-self: end;
+  padding-bottom: 20px;
 }
-
 .arrows {
   color: red;
   text-align: center;
