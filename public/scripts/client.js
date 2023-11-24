@@ -9,6 +9,13 @@ $( document ).ready(function() {
 
   //loading tweets
   const createTweetElement = function(tweetObj) {
+
+    const escape = function (str) {
+      let div = document.createElement("div");
+      div.appendChild(document.createTextNode(str));
+      return div.innerHTML;
+    };
+
     const output = `
     <article class="tweet">
     <header>
@@ -20,7 +27,7 @@ $( document ).ready(function() {
         ${tweetObj.user.handle}
       </div>
     </header>
-      <div class="tweet-content">${tweetObj.content.text}</div>
+      <div class="tweet-content">${escape(tweetObj.content.text)}</div>
     <footer>
       <div>${timeago.format(tweetObj.created_at)}</div>
       <div>
@@ -30,7 +37,7 @@ $( document ).ready(function() {
       </div>
     </footer>
   </article>
-  `;
+  `;  
   return output;
   };
 
@@ -42,16 +49,40 @@ $( document ).ready(function() {
   }
   
 
+  if ($('.error').is(':hidden')) {
+    console.log('hidden')
+  } else if ($('.error').is(':visible')) {
+    console.log('visible')
+  }
+
   //submitting tweets
   $('.new-tweet form').on("submit", function(event) {
     const formData = $(this).serialize();
     event.preventDefault();
 
+    //displays errors to user
+    const showErr = function(error) {
+      const errIcon = '<i class="fa-solid fa-triangle-exclamation"></i>'
+
+      if ($('.error').is(':visible')) {
+        $('.error').slideToggle('slow', () => {
+          $('.error').empty();
+          $('.error').append(errIcon, error);
+        })
+      } else {
+        $('.error').append(errIcon, error);
+      }
+      $('.error').slideToggle('slow')
+    };
+
+
     if ($('.counter').val() < 0) {
-      alert("Err: Too many characters!")
-      
+      if (!$('.error').is(':animated')) {
+        showErr('ERROR: Tweet is beyond character limit.');
+      }
+
     } else if (formData === "text=") {
-      alert("Err: No text provided!")
+      showErr('ERROR: No text Provided!')
 
     } else {
       $.ajax('/tweets', {
@@ -63,6 +94,7 @@ $( document ).ready(function() {
       .then(function() {
         loadTweets()
         $('#tweet-text').val('');
+        $('.counter').val(140);
       });
     };
   });
