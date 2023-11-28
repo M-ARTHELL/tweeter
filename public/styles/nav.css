@@ -7,6 +7,7 @@ nav {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  z-index: 10;
   position: fixed;
  }
 
@@ -25,4 +26,11 @@ nav {
 .arrows {
   color: red;
   text-align: center;
+}
+
+@media only screen and (max-width:1023px) {
+  nav {
+    background-color: transparent;
+    position: absolute;
+ }
 }

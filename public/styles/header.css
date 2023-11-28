@@ -1,5 +1,5 @@
 .userheader {
-  height: 520px;
+  height: 400px;
   width: 100%;
   color: #FFFFFF;
   background-color: orange;
@@ -9,3 +9,17 @@
   justify-content: flex-end;
   align-items: center;
  }
+
+ 
+@media only screen and (min-width:1024px) {
+  .userheader {
+    margin-top: 250px;
+    margin-left: 1.5em;
+    width: 30%;
+    float: left;
+    position:sticky;
+    top: 170px;
+ }
+}
+
+
