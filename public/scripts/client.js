@@ -1,10 +1,10 @@
-/*
- * Client-side JS logic goes here
- * jQuery is already loaded
- * Reminder: Use (and do all your DOM work in) jQuery's document ready function
- */
-
+//runs contents once the page is loaded
 $( document ).ready(function() {
+
+
+///////////////////////////////////////////////////////////////
+// FUNCTIONS
+///////////////////////////////////////////////////////////////
 
 
   //createTweetElement
@@ -41,7 +41,6 @@ $( document ).ready(function() {
     </footer>
   </article>
   `;
-
   return output;
   };
 
@@ -56,65 +55,6 @@ $( document ).ready(function() {
   }
 
 
-  //submitting tweets
-  //serializes new tweet data, checks for errors, and prevents redirect when posting
-  $('.new-tweet form').on("submit", function(event) {
-    const formData = $(this).serialize();
-    event.preventDefault();
-
-    //showErr
-    //displays errors to the user
-    const showErr = function(error) {
-      const errIcon = '<i class="fa-solid fa-triangle-exclamation"></i>'
-
-      //if an error is visible, hides and replaces it before showing the next one
-      if ($('.error').is(':visible') && error) {
-          $('.error').slideToggle('slow', () => {
-          $('.error').empty();
-          $('.error').append(errIcon, error);
-        })
-
-      //if errors are hidden, replaces any possible previous errors before display
-      } else if ($('.error').is(':hidden') && error) {
-        $('.error').empty();
-        $('.error').append(errIcon, error);
-      } 
-      
-      //toggles error visibility
-      $('.error').slideToggle()
-    };
-
-
-
-    //error for too many characters
-    if ($('.counter').val() < 0) {
-      if (!$('.error').is(':animated')) {
-        showErr('ERROR: Tweet exceeds character limit.');
-      }
-
-    //error for blank form
-    } else if (formData === "text=") {
-      showErr('ERROR: No text provided.')
-
-    //if no error, hides any error messages, sends the tweet to the server, and reloads the tweet list.
-    } else {
-      showErr();
-
-      $.ajax('/tweets', {
-        method: 'POST',
-        data: formData,
-        error: (errorThrown) => console.log(errorThrown),
-        success: () => console.log('success')
-      })
-      .then(function() {
-        loadTweets()
-        $('#tweet-text').val('');
-        $('.counter').val(140);
-      });
-    };
-  });
-
-
   //loadTweets
   //gets tweet array, if no error occurs, passes array to renderTweets function
   const loadTweets = function() {
@@ -125,7 +65,81 @@ $( document ).ready(function() {
     })
   };
 
-  //runs loadTweets so they appear when the user loads the page.
+
+///////////////////////////////////////////////////////////////
+// SUBMITTING TWEETS
+///////////////////////////////////////////////////////////////
+  
+
+  //serializes new tweet data, checks for errors, and prevents redirect when posting
+  $('.new-tweet form').on("submit", function(event) {
+    const formData = $(this).serialize();
+    event.preventDefault();
+
+
+    //showErr
+    //displays errors to the user
+    const showErr = function(error) {
+      const errIcon = '<i class="fa-solid fa-triangle-exclamation"></i>'
+
+      //if no error is passed to the function, ignore
+      if ($('.error').is(':hidden') && error === undefined) {
+        return;
+      
+      //if an error is already visible, hides and replaces it before showing the next one
+      } else if ($('.error').is(':visible') && error) {
+          $('.error').slideToggle('slow', () => {
+          $('.error').empty();
+          $('.error').append(errIcon, error);
+        })
+
+      //if errors are hidden, replaces any possible previous errors before displaying the next one
+      } else if ($('.error').is(':hidden')) {
+        $('.error').empty();
+        $('.error').append(errIcon, error);
+      }
+      
+      //toggles error visibility
+      $('.error').slideToggle()
+    };
+
+
+    //error cases
+    //error for too many characters
+    if ($('.counter').val() < 0) {
+      if (!$('.error').is(':animated')) {
+        showErr('ERROR: Tweet exceeds character limit.');
+      }
+
+    //error for blank form
+    } else if (formData === "text=") {
+      showErr('ERROR: No text provided.')
+
+    //if no error, hides any error messages, sends the tweet to the server, then reloads the tweet list.
+    } else {
+      showErr();
+
+      $.ajax('/tweets', {
+        method: 'POST',
+        data: formData,
+        error: (errorThrown) => console.log(errorThrown),
+        success: () => console.log('success')
+      })
+      .then(function() {
+        $('.tweet-container').empty();
+        loadTweets();
+        $('#tweet-text').val('');
+        $('.counter').val(140);
+      });
+    };
+  });
+
+
+///////////////////////////////////////////////////////////////
+// TO RUN ON LOAD
+///////////////////////////////////////////////////////////////
+
+//displays tweets to the user on page load
   loadTweets();
 
 
