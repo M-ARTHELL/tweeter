@@ -112,7 +112,7 @@ $( document ).ready(function() {
       }
 
     //error for blank form
-    } else if (formData === "text=") {
+    } else if (!$.trim($("textarea").val())) {
       showErr('ERROR: No text provided.')
 
     //if no error, hides any error messages, sends the tweet to the server, then reloads the tweet list.
